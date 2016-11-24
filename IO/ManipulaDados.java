@@ -1,3 +1,5 @@
+package IO;
+
 import java.io.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -7,24 +9,28 @@ public class ManipulaDados
 	private JFileChooser janela = null;
 	private String caminho = null;
 	private FileNameExtensionFilter filter = null;
-	private double x0=0,y0=0;
+	private float x0=0,y0=0;
 	private int speed0=12;
 	private long scoreInicial =0;
 	private int fase;
 	
-	public ManipulaDados()
+	public ManipulaDados()    //Construtor da classe - Instancia Objetos necessários para utilização
 	{
 		this.janela = new JFileChooser();
 		this.filter = new FileNameExtensionFilter("BreatHero Save States","bh");
 		janela.setFileFilter(filter);
 	}
 	
-	public void salvaJogo(double x0, double y0, int speed0, long scoreInicial, int fase) throws IOException
+	public void salvaJogo(float x0, float y0, int speed0, long scoreInicial, int fase) throws IOException  //Salva o jogo como
 	{
 		int retorno = janela.showSaveDialog(null);
 		if(retorno == JFileChooser.APPROVE_OPTION)
 		{
 			caminho = janela.getSelectedFile().getAbsolutePath();
+			if(!caminho.endsWith(".bh"))
+			{	
+				caminho = caminho +".bh";
+			}
 		}
 		if(caminho != "")
 		{
@@ -57,36 +63,29 @@ public class ManipulaDados
 			if(retorno == JFileChooser.APPROVE_OPTION)
 			{
 				File arquivo = janela.getSelectedFile();
-				String nomeArquivo = arquivo.getName();
-				if(nomeArquivo == "")
+				FileReader arq = new FileReader(arquivo);
+				BufferedReader lerSave = new BufferedReader(arq);
+				try
 				{
-					JOptionPane.showMessageDialog(null, "Nenhum Arquivo Selecionado");
+					
+					lerSave.readLine();
+					this.x0 = Float.parseFloat(lerSave.readLine());
+					lerSave.readLine();
+					this.y0 = Float.parseFloat(lerSave.readLine());
+					lerSave.readLine();
+					this.speed0 = Integer.parseInt(lerSave.readLine());
+					lerSave.readLine();
+					this.scoreInicial = Long.parseLong(lerSave.readLine());
+					lerSave.readLine();
+					this.fase = Integer.parseInt(lerSave.readLine());
+					lerSave.close();
 				}
-				else
+				catch(Exception e)
 				{
-					FileReader arq = new FileReader(arquivo);
-					BufferedReader lerSave = new BufferedReader(arq);
-					try
-					{
-						@SuppressWarnings("unused")
-						String linha = lerSave.readLine();
-						this.x0 = Double.parseDouble(lerSave.readLine());
-						linha = lerSave.readLine();
-						this.y0 = Double.parseDouble(lerSave.readLine());
-						linha = lerSave.readLine();
-						this.speed0 = Integer.parseInt(lerSave.readLine());
-						linha = lerSave.readLine();
-						this.scoreInicial = Long.parseLong(lerSave.readLine());
-						linha = lerSave.readLine();
-						this.fase = Integer.parseInt(lerSave.readLine());
-						lerSave.close();
-					}
-					catch(Exception e)
-					{
-						JOptionPane.showMessageDialog(null,"Erro ao ler arquivo","Error404",JOptionPane.ERROR_MESSAGE);
-					}
+					JOptionPane.showMessageDialog(null,"Erro ao ler arquivo","Error404",JOptionPane.ERROR_MESSAGE);
 				}
 			}
+			
 			else
 			{
 				JOptionPane.showMessageDialog(null, "Nenhum Arquivo Selecionado");
@@ -95,12 +94,12 @@ public class ManipulaDados
 		catch(Exception e){}
 	}
 
-	public double getX0() 
+	public float getX0() 
 	{
 		return x0;
 	}
 
-	public double getY0() 
+	public float getY0() 
 	{
 		return y0;
 	}
