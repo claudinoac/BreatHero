@@ -5,9 +5,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.*;
 import java.util.HashMap;
+
 import javax.swing.*;
-import IO.ManipulaDados;
-import Labirinto.Fase1;
+
+import IO.ManipulaDados;;
 
 @SuppressWarnings("serial")
 public class JanelaDeJogo extends JFrame 
@@ -25,35 +26,41 @@ public class JanelaDeJogo extends JFrame
 	private JMenuItem carregar;
 	private boolean isPaused = false;
 	private HashMap<Integer,Boolean> keyPool;
+	private int fase;
 
 	public JanelaDeJogo() 
 	{	
-		this(50,0,5,0,1);
+		this(50,0,10,0,1);
 	}
 	      
-	public JanelaDeJogo(float x0,float y0, int speed, long scoreInicial,int fase) 
+	public JanelaDeJogo(double x0,double y0, int speed, long scoreInicial,int fase) 
 	{
 		this.keyPool = new HashMap<Integer,Boolean>();
+		this.fase = fase;
 		try 
 		{
 			Thread.sleep(10);
 		} 
 		catch (InterruptedException e1) {}
-		
-		g1 = new GameEngine(new Fase1(),x0,y0,speed,scoreInicial,fase);
+				
+		g1 = new GameEngine(fase,x0,y0,speed,scoreInicial);
 		montaTela();
 		addListeners();
-		while(!isPaused)
+		while(true)
 		{
-			try 
+			if(!isPaused)
 			{
-				Thread.sleep(100);
-			} 
-			catch (InterruptedException e1) {}
-		
-			pontuacao.setText("Pontuação: "+g1.getPontuacao());
-			g1.setKeyPool(keyPool);
-			
+				try 
+				{
+					Thread.sleep(100);
+				} 
+				catch (InterruptedException e1) 
+				{
+					System.out.println("Erro de renderização");
+				}
+				pontuacao.setText("Pontuação: "+g1.getPontuacao());
+				g1.setKeyPool(keyPool);
+			}
 		}
 	}
 	
@@ -100,17 +107,12 @@ public class JanelaDeJogo extends JFrame
 		       		ManipulaDados dado = new ManipulaDados();
 		       		try
 		       		{
-		       			dado.salvaJogo(g1.getX0(),g1.getY0(),g1.getSpeed(),g1.getPontuacao(),g1.getFase());
-			       		continuaJogo();
+		       			dado.salvaJogo(g1.getX0(),g1.getY0(),g1.getSpeed(),g1.getPontuacao(),fase);
 		       		}
-		       		catch(Exception ex)
-		       		{
-		        			continuaJogo();
-		       		}
+		       		catch(Exception ex){}
 		       	break;
 		       		
 		       	case JOptionPane.CANCEL_OPTION:
-		       		continuaJogo();
 		       	break;
 		          }
 		       }
@@ -125,13 +127,9 @@ public class JanelaDeJogo extends JFrame
 	   		ManipulaDados dado = new ManipulaDados();
     		try
     		{
-    			dado.salvaJogo(g1.getX0(),g1.getY0(),g1.getSpeed(),g1.getPontuacao(),g1.getFase());
-        		continuaJogo();
+    			dado.salvaJogo(g1.getX0(),g1.getY0(),g1.getSpeed(),g1.getPontuacao(),fase);
     		}
-    		catch(Exception ex)
-    		{
-    			continuaJogo();
-    		}
+    		catch(Exception ex){}
 	   	}	
 	   });
 	   
@@ -142,12 +140,15 @@ public class JanelaDeJogo extends JFrame
 	   	{
 	   		pausaJogo();
 	   		ManipulaDados dado = new ManipulaDados();
-			dado.carregaJogo();
-			g1 = new GameEngine(new Fase1(),dado.getX0(),dado.getY0(),dado.getSpeed0(),dado.getScoreInicial(),dado.getFase());	
-			add(g1);
-			continuaJogo();
+	   		dado.carregaJogo();
+	   		fase = dado.getFase();
+	   		remove(g1);
+	   		g1 = new GameEngine(dado.getFase(),dado.getX0(),dado.getY0(),dado.getSpeed0(),dado.getScoreInicial());
+	   		add(g1);
+	   		continuaJogo();
 	   	}
 	   });
+	  
 	}  
 	
 	public void montaTela() 
@@ -162,15 +163,15 @@ public class JanelaDeJogo extends JFrame
 		menu = new JMenu("Arquivo");
 		pontuacao = new JLabel("Pontuação: "+g1.getPontuacao());
 		salvar = new JMenuItem("Salvar Jogo");
-		lives = "■■■■■";
+		lives = "■■■■■■■■■■";
 		nameLiveLabel = new JLabel("Lives: ");
 		livesLabel = new JLabel(lives);
 		carregar = new JMenuItem("Carregar Jogo");
 		GridBagLayout layout = new GridBagLayout();
 		GridBagConstraints g = new GridBagConstraints();
-		int[] menuBarColWidth = {390,150,150};
+		int[] menuBarColWidth = {330,200,150};
 		
-		livesLabel.setForeground(Color.red);
+		livesLabel.setForeground(Color.blue);
 		menuBar.setLayout(layout);
 		layout.columnWidths = menuBarColWidth;
 		menu.add(salvar);
@@ -203,6 +204,7 @@ public class JanelaDeJogo extends JFrame
 	{
 		try
 		{
+			setTitle("BreatHero - Pausado (Pressione \"espaço\" para continuar)");
 			g1.setPaused(true);
 			isPaused = true;
 		}
@@ -213,12 +215,19 @@ public class JanelaDeJogo extends JFrame
 	{
 		try
 		{
-			JOptionPane.showMessageDialog(null, "Pressione Ok para continuar");
 			Thread.sleep(100);
+			setTitle("BreatHero - Rodando");
 			g1.setPaused(false);
 			isPaused = false;
 		}
 		catch(Exception exc){}
+	}
+	
+	public boolean isPaused()
+	{
+		boolean value = false;
+		value |= (isPaused || g1.isPaused());
+		return value;
 	}
 }
 	  

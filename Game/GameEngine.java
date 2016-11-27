@@ -1,13 +1,18 @@
 package Game;
 
 import Personagens.BreatHero;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import javax.swing.JPanel;
+
+import Labirinto.Fase1;
+import Labirinto.Fase2;
 import Labirinto.Labirinto;
 
 @SuppressWarnings("serial")
@@ -18,21 +23,36 @@ public class GameEngine extends JPanel
 	private Timer tim ;
 	private long pontuacao=0,scoreInicial = 0;
 	private int x = 0,y = 0,max = 8, speed = 12;
-	private int fase = 1;
 	private boolean isPaused = false;
 	private String vidas;
 	private HashMap<Integer,Boolean> keyPool;
 	
 	
-	public GameEngine(Labirinto lab, float x0, float y0, int speed,long scoreInicial,int fase)
+	public GameEngine(int fase, double x0, double y0, int speed,long scoreInicial)
 	{
 		tim = new Timer();
 		this.keyPool = new HashMap<Integer,Boolean>();
 		this.scoreInicial = scoreInicial;
 		this.speed = speed;
-		this.fase = fase;
-		this.lab = lab;
 		this.boneco = new BreatHero();
+		
+		switch(fase)
+		{
+			case 1:
+				this.lab = new Fase1();
+			break;
+			
+			case 2:
+				this.lab = new Fase2();
+			break;
+			
+			default:
+				System.out.println("Err0r: Fase Inexistente!");
+				System.exit(0);
+			break;
+				
+		}
+		
 		lab.geraLabirinto();
 		lab.moveLabirinto(x0);
 		boneco.geraBreatHero();
@@ -43,7 +63,6 @@ public class GameEngine extends JPanel
 		{	
 			public void run() 
 			{
-				
 				if(!isPaused)
 				{
 					boneco.moveBreatHero(y);
@@ -60,7 +79,7 @@ public class GameEngine extends JPanel
 						y++;
 					}
 					
-					if(x<lab.getX1()*2)
+					if(x<lab.getPeriodo())
 					{
 						lab.moveLabirinto(x);
 						x++;
@@ -130,7 +149,12 @@ public class GameEngine extends JPanel
 		this.isPaused = isPaused;
 	}
     
-    public int getX0() 
+    public boolean isPaused() 
+    {
+		return isPaused;
+	}
+
+	public int getX0() 
     {
 		return x;
 	}
@@ -144,16 +168,9 @@ public class GameEngine extends JPanel
     {
 		return speed;
 	}
-
-	public int getFase() 
-	{
-		return fase;
-	}
 	
 	public void setKeyPool(HashMap<Integer, Boolean> keyPool) 
 	{
 		this.keyPool = keyPool;
 	}
-
-	
 }

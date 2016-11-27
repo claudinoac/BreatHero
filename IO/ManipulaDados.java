@@ -9,7 +9,7 @@ public class ManipulaDados
 	private JFileChooser janela = null;
 	private String caminho = null;
 	private FileNameExtensionFilter filter = null;
-	private float x0=0,y0=0;
+	private double x0=0,y0=0;
 	private int speed0=12;
 	private long scoreInicial =0;
 	private int fase;
@@ -21,7 +21,7 @@ public class ManipulaDados
 		janela.setFileFilter(filter);
 	}
 	
-	public void salvaJogo(float x0, float y0, int speed0, long scoreInicial, int fase) throws IOException  //Salva o jogo como
+	public void salvaJogo(double x0, double y0, int speed0, long scoreInicial, int fase) throws IOException  //Salva o jogo como
 	{
 		int retorno = janela.showSaveDialog(null);
 		if(retorno == JFileChooser.APPROVE_OPTION)
@@ -69,9 +69,9 @@ public class ManipulaDados
 				{
 					
 					lerSave.readLine();
-					this.x0 = Float.parseFloat(lerSave.readLine());
+					this.x0 = Double.parseDouble(lerSave.readLine());
 					lerSave.readLine();
-					this.y0 = Float.parseFloat(lerSave.readLine());
+					this.y0 = Double.parseDouble(lerSave.readLine());
 					lerSave.readLine();
 					this.speed0 = Integer.parseInt(lerSave.readLine());
 					lerSave.readLine();
@@ -94,12 +94,12 @@ public class ManipulaDados
 		catch(Exception e){}
 	}
 
-	public float getX0() 
+	public double getX0() 
 	{
 		return x0;
 	}
 
-	public float getY0() 
+	public double getY0() 
 	{
 		return y0;
 	}
