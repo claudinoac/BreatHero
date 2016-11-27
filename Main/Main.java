@@ -21,47 +21,50 @@ public class Main
 		menu.setLocationRelativeTo(null);
 		menu.setVisible(true);
 		menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		while(!menu.isPressedFlag()){}
-		String option = menu.getPressedBut();
-		switch(option)
+		while(true)
 		{
-			case "novo":
-				menu.dispose();
-				frame = new JanelaDeJogo();
-			break;
+			while(!menu.isPressedFlag()){}
+			String option = menu.getPressedBut();
+			switch(option)
+			{
+				case "novo":
+					menu.dispose();
+					frame = new JanelaDeJogo();
+				break;
 			
-			case "continua":
-				menu.dispose();
-				ManipulaDados dado = new ManipulaDados();
-				dado.carregaJogo();
-				frame = new JanelaDeJogo(dado.getX0(),dado.getY0(),dado.getSpeed0(),dado.getScoreInicial(),dado.getFase());
-				frame.setVisible(true);
-			break;
+				case "continua":
+					menu.dispose();
+					ManipulaDados dado = new ManipulaDados();
+					dado.carregaJogo();
+					frame = new JanelaDeJogo(dado.getX0(),dado.getY0(),dado.getSpeed0(),dado.getScoreInicial(),dado.getFase());
+					frame.setVisible(true);
+				break;
 	
-			case "opcoes":
+				case "opcoes":
 				
-			break;
+				break;
 			
-			case "recordes":
-				menu.setVisible(false);
-				JPanel recordes = new JPanel();
-				recordes.setLayout(new BoxLayout(recordes,BoxLayout.Y_AXIS));
-				JLabel[] labels= new JLabel[4];
-				for(int i=0; i<4; i++)
-				{
-					labels[i] = new JLabel(""+i);
-					recordes.add(labels[i]);
-				}
-				JOptionPane.showMessageDialog(null,recordes,"Recordes",JOptionPane.INFORMATION_MESSAGE);
-				menu.setVisible(true);				
-				
-				
-			break;
-			
-			case "sair":
-				System.exit(0);
-			break;
-			
+				case "recordes":
+					menu.setVisible(false);
+					JPanel recordes = new JPanel();
+					recordes.setLayout(new BoxLayout(recordes,BoxLayout.Y_AXIS));
+					JLabel[] labels= new JLabel[4];
+					for(int i=0; i<4; i++)
+					{
+						labels[i] = new JLabel(""+i);
+						recordes.add(labels[i]);
+					}
+					JOptionPane.showMessageDialog(null,recordes,"Recordes",JOptionPane.INFORMATION_MESSAGE);
+					menu.setVisible(true);
+					menu.setPressedFlag(false);
+					
+					
+				break;
+					
+				case "sair":
+					System.exit(0);
+				break;
+			}
 		}
 	}  
 }	

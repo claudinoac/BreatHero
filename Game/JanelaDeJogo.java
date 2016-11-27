@@ -150,7 +150,7 @@ public class JanelaDeJogo extends JFrame
 	
 	public void montaTela() 
 	{
-		setTitle("BreatHero");
+		setTitle("BreatHero - (Pressione \"espaço\" para pausar");
 		setSize(WIDTH, HEIGHT);
 		setResizable(false);
 		setLocationRelativeTo(null);

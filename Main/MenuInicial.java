@@ -88,6 +88,11 @@ public class MenuInicial extends JFrame
 		return pressedFlag;
 	}
 
+	public void setPressedFlag(boolean pressedFlag)
+	{
+		this.pressedFlag = pressedFlag;
+	}
+
 	public String getPressedBut() //getter para a variavel de identificação de botão pressionado
 	{
 		return pressedBut;
