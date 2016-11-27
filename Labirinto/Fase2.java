@@ -11,7 +11,7 @@ public class Fase2 extends Labirinto
 	private static double x0 = 0;
 	private static double x1 = 300;
 	private static double y0 = 50;
-	private static double y1 = 150;
+	private static double y1 = 170;
 	
 	private Line2D[][] lines = new Line2D.Double[2][8];
 	

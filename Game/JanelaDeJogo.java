@@ -30,7 +30,7 @@ public class JanelaDeJogo extends JFrame
 
 	public JanelaDeJogo() 
 	{	
-		this(50,0,10,0,1);
+		this(50,0,5,0,1);
 	}
 	      
 	public JanelaDeJogo(double x0,double y0, int speed, long scoreInicial,int fase) 
@@ -54,10 +54,7 @@ public class JanelaDeJogo extends JFrame
 				{
 					Thread.sleep(100);
 				} 
-				catch (InterruptedException e1) 
-				{
-					System.out.println("Erro de renderização");
-				}
+				catch (InterruptedException e1){}
 				pontuacao.setText("Pontuação: "+g1.getPontuacao());
 				g1.setKeyPool(keyPool);
 			}

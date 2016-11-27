@@ -1,11 +1,18 @@
 package Main;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 import Game.JanelaDeJogo;
 import IO.ManipulaDados;
 
 public class Main 
 {	
+	
+	
 	public static void main(String[] args)
 	{
 		MenuInicial menu;
@@ -36,7 +43,19 @@ public class Main
 			break;
 			
 			case "recordes":
-				menu.setVisible(false);	
+				menu.setVisible(false);
+				JPanel recordes = new JPanel();
+				recordes.setLayout(new BoxLayout(recordes,BoxLayout.Y_AXIS));
+				JLabel[] labels= new JLabel[4];
+				for(int i=0; i<4; i++)
+				{
+					labels[i] = new JLabel(""+i);
+					recordes.add(labels[i]);
+				}
+				JOptionPane.showMessageDialog(null,recordes,"Recordes",JOptionPane.INFORMATION_MESSAGE);
+				menu.setVisible(true);				
+				
+				
 			break;
 			
 			case "sair":
