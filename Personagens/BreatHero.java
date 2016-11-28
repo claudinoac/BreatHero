@@ -12,8 +12,7 @@ public class BreatHero
 {
 	private BufferedImage imagem;
 	private int x0 = 75;
-	private int y0 = 0;
-	private int y = 0;
+	private int y = 210;
 	
 	
 
@@ -27,18 +26,14 @@ public class BreatHero
 		g2.drawImage(imagem,x0,y,null);
 		return g2;
 	}
-	
-	public int getX0() {
-		return x0;
-	}
 
-	public BufferedImage getImagem() {
+	public BufferedImage getImagem() 
+	{
 		return imagem;
 	}
 
 	public void geraBreatHero()
 	{
-		y=y0;
 		try
 		{
 			imagem = ImageIO.read(new File("src/resources/bexiga.jpg"));
@@ -49,13 +44,18 @@ public class BreatHero
 		}
 	}
 	
-	public void moveBreatHero(int offset)
+	public void moveBreatHero(double y02)
 	{
-		y =  offset;
+		y =  (int)y02;
 	}
 	
-	public int getY() 
+	public int getY0() 
 	{
 		return y;
+	}
+	
+	public int getX0()
+	{
+		return x0;
 	}
 }

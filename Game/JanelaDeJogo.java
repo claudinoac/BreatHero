@@ -30,10 +30,10 @@ public class JanelaDeJogo extends JFrame
 
 	public JanelaDeJogo() 
 	{	
-		this(50,0,5,0,1);
+		this(0,210,5,0,1);
 	}
 	      
-	public JanelaDeJogo(double x0,double y0, int speed, long scoreInicial,int fase) 
+	public JanelaDeJogo(double x0,double y0, long periodoLabirinto, long scoreInicial,int fase) 
 	{
 		this.keyPool = new HashMap<Integer,Boolean>();
 		this.fase = fase;
@@ -42,10 +42,10 @@ public class JanelaDeJogo extends JFrame
 			Thread.sleep(10);
 		} 
 		catch (InterruptedException e1) {}
-				
-		g1 = new GameEngine(fase,x0,y0,speed,scoreInicial);
+		g1 = new GameEngine(fase,x0,y0,periodoLabirinto,scoreInicial);
 		montaTela();
 		addListeners();
+		isPaused = true;
 		while(true)
 		{
 			if(!isPaused)
@@ -56,6 +56,7 @@ public class JanelaDeJogo extends JFrame
 				} 
 				catch (InterruptedException e1){}
 				pontuacao.setText("Pontuação: "+g1.getPontuacao());
+				livesLabel.setText(g1.getVidas().toString());
 				g1.setKeyPool(keyPool);
 			}
 		}
@@ -104,7 +105,7 @@ public class JanelaDeJogo extends JFrame
 		       		ManipulaDados dado = new ManipulaDados();
 		       		try
 		       		{
-		       			dado.salvaJogo(g1.getX0(),g1.getY0(),g1.getSpeed(),g1.getPontuacao(),fase);
+		       			dado.salvaJogo(g1.getX0(),g1.getY0(),g1.getPeriodoLabirinto(),g1.getPontuacao(),fase);
 		       		}
 		       		catch(Exception ex){}
 		       	break;
@@ -124,7 +125,7 @@ public class JanelaDeJogo extends JFrame
 	   		ManipulaDados dado = new ManipulaDados();
     		try
     		{
-    			dado.salvaJogo(g1.getX0(),g1.getY0(),g1.getSpeed(),g1.getPontuacao(),fase);
+    			dado.salvaJogo(g1.getX0(),g1.getY0(),g1.getPeriodoLabirinto(),g1.getPontuacao(),fase);
     		}
     		catch(Exception ex){}
 	   	}	
@@ -140,9 +141,10 @@ public class JanelaDeJogo extends JFrame
 	   		dado.carregaJogo();
 	   		fase = dado.getFase();
 	   		remove(g1);
-	   		g1 = new GameEngine(dado.getFase(),dado.getX0(),dado.getY0(),dado.getSpeed0(),dado.getScoreInicial());
+	   		g1 = new GameEngine(dado.getFase(),dado.getX0(),dado.getY0(),dado.getPeriodoLabirinto(),dado.getScoreInicial());
 	   		add(g1);
 	   		continuaJogo();
+	   		pausaJogo();
 	   	}
 	   });
 	  
@@ -150,7 +152,7 @@ public class JanelaDeJogo extends JFrame
 	
 	public void montaTela() 
 	{
-		setTitle("BreatHero - (Pressione \"espaço\" para pausar");
+		setTitle("BreatHero - Aperte \"espaço\" para iniciar");
 		setSize(WIDTH, HEIGHT);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -213,7 +215,7 @@ public class JanelaDeJogo extends JFrame
 		try
 		{
 			Thread.sleep(100);
-			setTitle("BreatHero - Rodando");
+			setTitle("BreatHero - Rodando (Pessione \"espaço\" para pausar)");
 			g1.setPaused(false);
 			isPaused = false;
 		}

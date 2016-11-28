@@ -10,7 +10,7 @@ public class ManipulaDados
 	private String caminho = null;
 	private FileNameExtensionFilter filter = null;
 	private double x0=0,y0=0;
-	private int speed0=12;
+	private long periodoLabirinto=12;
 	private long scoreInicial =0;
 	private int fase;
 	
@@ -21,7 +21,7 @@ public class ManipulaDados
 		janela.setFileFilter(filter);
 	}
 	
-	public void salvaJogo(double x0, double y0, int speed0, long scoreInicial, int fase) throws IOException  //Salva o jogo como
+	public void salvaJogo(double x0, double y0, long periodoLabirinto, long scoreInicial, int fase) throws IOException  //Salva o jogo como
 	{
 		int retorno = janela.showSaveDialog(null);
 		if(retorno == JFileChooser.APPROVE_OPTION)
@@ -41,7 +41,7 @@ public class ManipulaDados
 			writer.println("Posição y inicial:");
 			writer.println(y0);
 			writer.println("Velocidade Inicial:");
-			writer.println(speed0);
+			writer.println(periodoLabirinto);
 			writer.println("Score Inicial:");
 			writer.println(scoreInicial);
 			writer.println("Fase Atual:");
@@ -73,7 +73,7 @@ public class ManipulaDados
 					lerSave.readLine();
 					this.y0 = Double.parseDouble(lerSave.readLine());
 					lerSave.readLine();
-					this.speed0 = Integer.parseInt(lerSave.readLine());
+					this.periodoLabirinto = Long.parseLong(lerSave.readLine());
 					lerSave.readLine();
 					this.scoreInicial = Long.parseLong(lerSave.readLine());
 					lerSave.readLine();
@@ -104,9 +104,9 @@ public class ManipulaDados
 		return y0;
 	}
 
-	public int getSpeed0() 
+	public long getPeriodoLabirinto() 
 	{
-		return speed0;
+		return periodoLabirinto;
 	}
 
 	public long getScoreInicial() 

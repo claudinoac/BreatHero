@@ -36,7 +36,7 @@ public class Main
 					menu.dispose();
 					ManipulaDados dado = new ManipulaDados();
 					dado.carregaJogo();
-					frame = new JanelaDeJogo(dado.getX0(),dado.getY0(),dado.getSpeed0(),dado.getScoreInicial(),dado.getFase());
+					frame = new JanelaDeJogo(dado.getX0(),dado.getY0(),dado.getPeriodoLabirinto(),dado.getScoreInicial(),dado.getFase());
 					frame.setVisible(true);
 				break;
 	
@@ -54,7 +54,7 @@ public class Main
 						labels[i] = new JLabel(""+i);
 						recordes.add(labels[i]);
 					}
-					JOptionPane.showMessageDialog(null,recordes,"Recordes",JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null,recordes,"Recordes",JOptionPane.PLAIN_MESSAGE);
 					menu.setVisible(true);
 					menu.setPressedFlag(false);
 					

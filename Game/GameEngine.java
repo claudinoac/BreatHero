@@ -1,16 +1,14 @@
 package Game;
 
-import Personagens.BreatHero;
-
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.JPanel;
 
+import Personagens.BreatHero;
 import Labirinto.Fase1;
 import Labirinto.Fase2;
 import Labirinto.Labirinto;
@@ -20,21 +18,25 @@ public class GameEngine extends JPanel
 {
 	private Labirinto lab;
 	private BreatHero boneco;
-	private Timer tim ;
-	private long pontuacao=0,scoreInicial = 0;
-	private int x = 0,y = 0,max = 8, speed = 12;
+	private Timer timerFrame , timerLabirinto;
+	private long pontuacao=0,scoreInicial = 0,periodoBreatHero = 5,periodoLabirinto = 5;
+	private double x = 0,y = 0;
 	private boolean isPaused = false;
-	private String vidas;
 	private HashMap<Integer,Boolean> keyPool;
+	private String vidas = "■■■■■■■■■■";
+	private int intersects=0;
 	
 	
-	public GameEngine(int fase, double x0, double y0, int speed,long scoreInicial)
+	public GameEngine(int fase, double x0, double y0, long periodoLabirinto,long scoreInicial)
 	{
-		tim = new Timer();
+		timerFrame = new Timer();
+		timerLabirinto = new Timer();
 		this.keyPool = new HashMap<Integer,Boolean>();
 		this.scoreInicial = scoreInicial;
-		this.speed = speed;
+		this.periodoLabirinto = periodoLabirinto;
 		this.boneco = new BreatHero();
+		this.y = y0;
+		this.x = x0;
 		
 		switch(fase)
 		{
@@ -52,22 +54,30 @@ public class GameEngine extends JPanel
 			break;
 				
 		}
-		
+		isPaused= true;
 		lab.geraLabirinto();
-		lab.moveLabirinto(x0);
+		lab.moveLabirinto(x);
 		boneco.geraBreatHero();
-		boneco.moveBreatHero(75);
-		this.max = speed;
+		boneco.moveBreatHero(y);
+		GameEngine.this.repaint();
 		
-		tim.scheduleAtFixedRate(new TimerTask() 
+		timerFrame.scheduleAtFixedRate(new TimerTask() 
 		{	
 			public void run() 
 			{
 				if(!isPaused)
 				{
 					boneco.moveBreatHero(y);
-					if(lab.interceptaLabirinto(boneco,boneco.getX0(),y))
+					if(lab.interceptaLabirinto(boneco,boneco.getX0(),(int)y))
+					{
 						System.out.println("Interceptou: "+x+"," +y);
+						intersects++;
+						if(intersects==90)
+						{
+							perdeVida();
+							intersects = 0;
+						}
+					}
 					
 					if(keyPool.get(KeyEvent.VK_UP) != null && y>0)
 					{
@@ -78,20 +88,30 @@ public class GameEngine extends JPanel
 					{
 						y++;
 					}
-					
+					GameEngine.this.repaint();
+				}
+			}
+		},0,periodoBreatHero);
+		
+		timerLabirinto.scheduleAtFixedRate(new TimerTask()
+		{
+			public void run()
+			{
+				if(!isPaused)
+				{
 					if(x<lab.getPeriodo())
 					{
 						lab.moveLabirinto(x);
 						x++;
 					}
-					else
+					else	
 						x=0;
 					
 					GameEngine.this.repaint();
 					pontuacao++;
 				}
 			}
-		},0,(long)max);	
+		}, 0, periodoLabirinto);
 	}
 	
     public void paintComponent(Graphics g)
@@ -100,37 +120,34 @@ public class GameEngine extends JPanel
     	g2.clearRect(0, 0, this.getSize().width, this.getSize().height);
     	g2=lab.paintComponent(g2);
     	g2=boneco.paintComponent(g2);	
+    	
 	}
     
-    public void perdeVida()
-    {
-    	switch(vidas)
-    	{
-    		case "■■■■■":
-    			vidas = "■■■■ ";
-    		break;
-    		
-    		case "■■■■ ":
-    			vidas = "■■■  ";
-    		break;
-    		
-    		case "■■■  ":
-    			vidas = "■■   ";
-    		break;
-    			
-    		case "■■   ":
-    			vidas = "■    ";
-    		break;
-    		
-    		case "■    ":
-    			vidas = "     ";
-    		break;
-    	}
-    	
-    }
-
     public void ganhaVida()
     {
+    	char[] aux = new char[11];
+    	vidas.getChars(0, 9, aux, 0);
+    	System.out.println(aux);
+    	int i=0;
+    	while(aux[i] != ' ' && i < 9)
+    		i++;
+    	aux[i] = '■';
+    	vidas = aux.toString();
+    }
+
+    public void perdeVida()
+    {
+    	char[] aux = new char[11];
+    	aux = vidas.toCharArray();
+    	System.out.println(aux);
+    	int i=0;
+    	while(aux[i] != ' ' && i < vidas.length()-1)
+    		i++;
+    	if(aux[i] != ' ')
+    		aux[i] = ' ';
+    	else
+    		aux[i-1] = ' ';
+    	vidas = aux.toString();
     	
     }
     
@@ -141,7 +158,7 @@ public class GameEngine extends JPanel
     
     public long getPontuacao() 
     {
-		return scoreInicial+pontuacao/speed;
+		return scoreInicial+pontuacao/periodoLabirinto;
 	}
     
 	public void setPaused(boolean isPaused)
@@ -154,21 +171,26 @@ public class GameEngine extends JPanel
 		return isPaused;
 	}
 
-	public int getX0() 
+	public double getX0() 
     {
 		return x;
 	}
     
-    public int getY0() 
+    public double getY0() 
     {
 		return y;
 	}
     
-    public int getSpeed() 
+    public long getPeriodoLabirinto() 
     {
-		return speed;
+		return periodoLabirinto;
 	}
 	
+	public String getVidas() 
+	{
+		return vidas;
+	}
+
 	public void setKeyPool(HashMap<Integer, Boolean> keyPool) 
 	{
 		this.keyPool = keyPool;
