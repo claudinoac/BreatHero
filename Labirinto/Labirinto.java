@@ -23,6 +23,6 @@ public abstract class Labirinto  //Classe molde para fases do jogo
 	
 	public abstract void moveLabirinto(double offset);     //Move o labirinto através de um offset
 	
-	public abstract boolean interceptaLabirinto(BreatHero boneco,int x,int y); //retorna uma flag que informa se algo interceptou o labirinto
+	public abstract boolean interceptaLabirinto(BreatHero boneco,int x,int y); 	//retorna uma flag que informa se algo interceptou o labirinto
 	
 }

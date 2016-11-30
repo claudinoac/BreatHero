@@ -44,7 +44,6 @@ public class Fase2 extends Labirinto
 				lines[i][4*j+2] = new Line2D.Double(x0+x1*(4*j+2),y0+y1*i,x0+x1*(4*j+3),y0+y1*(i+1));
 				lines[i][4*j+3] = new Line2D.Double(x0+x1*(4*j+3),y0+y1*i,x0+x1*(4*j+4),y0+y1*i);
 			}
-			
 		}
 	}
 

@@ -18,19 +18,21 @@ public class GameEngine extends JPanel
 {
 	private Labirinto lab;
 	private BreatHero boneco;
-	private Timer timerFrame , timerLabirinto;
+	private Timer timerFrame , timerLabirinto, /*timerVidas*/;
 	private long pontuacao=0,scoreInicial = 0,periodoBreatHero = 5,periodoLabirinto = 5;
 	private double x = 0,y = 0;
-	private boolean isPaused = false;
+	private boolean isPaused;
 	private HashMap<Integer,Boolean> keyPool;
 	private String vidas = "■■■■■■■■■■";
+	private String velocidade = "■■■■■";
 	private int intersects=0;
 	
 	
 	public GameEngine(int fase, double x0, double y0, long periodoLabirinto,long scoreInicial)
 	{
-		timerFrame = new Timer();
-		timerLabirinto = new Timer();
+		this.timerFrame = new Timer();
+		this.timerLabirinto = new Timer();
+		this.timerVidas = new Timer();
 		this.keyPool = new HashMap<Integer,Boolean>();
 		this.scoreInicial = scoreInicial;
 		this.periodoLabirinto = periodoLabirinto;
@@ -59,7 +61,7 @@ public class GameEngine extends JPanel
 		lab.moveLabirinto(x);
 		boneco.geraBreatHero();
 		boneco.moveBreatHero(y);
-		GameEngine.this.repaint();
+		GameEngine.this.repaint();	
 		
 		timerFrame.scheduleAtFixedRate(new TimerTask() 
 		{	
@@ -88,8 +90,8 @@ public class GameEngine extends JPanel
 					{
 						y++;
 					}
-					GameEngine.this.repaint();
 				}
+				GameEngine.this.repaint();
 			}
 		},0,periodoBreatHero);
 		
@@ -107,12 +109,23 @@ public class GameEngine extends JPanel
 					else	
 						x=0;
 					
-					GameEngine.this.repaint();
 					pontuacao++;
 				}
+				GameEngine.this.repaint();
 			}
 		}, 0, periodoLabirinto);
+		
+		/*timerVidas.scheduleAtFixedRate(new TimerTask()
+		{
+			public void run() 
+			{
+				ganhaVida();
+				GameEngine.this.repaint();
+			}
+		}, 0, 10000);*/
 	}
+	
+	
 	
     public void paintComponent(Graphics g)
    	{	
@@ -126,28 +139,26 @@ public class GameEngine extends JPanel
     public void ganhaVida()
     {
     	char[] aux = new char[11];
-    	vidas.getChars(0, 9, aux, 0);
-    	System.out.println(aux);
+    	vidas.getChars(0,vidas.length()-1,aux,0);
     	int i=0;
-    	while(aux[i] != ' ' && i < 9)
+    	while(aux[i] != ' ' && i < vidas.length()-1)
     		i++;
     	aux[i] = '■';
-    	vidas = aux.toString();
+    	vidas = new String(aux); 
     }
 
     public void perdeVida()
     {
     	char[] aux = new char[11];
-    	aux = vidas.toCharArray();
-    	System.out.println(aux);
+    	vidas.getChars(0,vidas.length()-1,aux,0);
     	int i=0;
-    	while(aux[i] != ' ' && i < vidas.length()-1)
+    	while(aux[i] != ' ' && i < vidas.length()-1)
     		i++;
     	if(aux[i] != ' ')
     		aux[i] = ' ';
-    	else
+    	else if(i!=0)
     		aux[i-1] = ' ';
-    	vidas = aux.toString();
+    	vidas = new String(aux);
     	
     }
     
@@ -194,5 +205,10 @@ public class GameEngine extends JPanel
 	public void setKeyPool(HashMap<Integer, Boolean> keyPool) 
 	{
 		this.keyPool = keyPool;
+	}
+
+	public String getVelocidade() 
+	{
+		return velocidade;
 	}
 }

@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.*;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.HashMap;
-
 import javax.swing.*;
-
-import IO.ManipulaDados;;
+import IO.ManipulaDados;
 
 @SuppressWarnings("serial")
 public class JanelaDeJogo extends JFrame 
@@ -16,17 +16,15 @@ public class JanelaDeJogo extends JFrame
 	private final int WIDTH = 700;
 	private final int HEIGHT = 480;
 	private GameEngine g1;
-	private JMenuBar menuBar;
-	private JMenu menu;
 	private JLabel pontuacao;
 	private JLabel livesLabel;
-	private JLabel nameLiveLabel;
-	private String lives;
+	private JLabel velLabel;
 	private JMenuItem salvar;
 	private JMenuItem carregar;
-	private boolean isPaused = false;
+	private boolean isPaused;
 	private HashMap<Integer,Boolean> keyPool;
 	private int fase;
+	private Timer atualizaBarra;
 
 	public JanelaDeJogo() 
 	{	
@@ -35,31 +33,32 @@ public class JanelaDeJogo extends JFrame
 	      
 	public JanelaDeJogo(double x0,double y0, long periodoLabirinto, long scoreInicial,int fase) 
 	{
+		
 		this.keyPool = new HashMap<Integer,Boolean>();
 		this.fase = fase;
-		try 
-		{
-			Thread.sleep(10);
-		} 
-		catch (InterruptedException e1) {}
+		this.atualizaBarra = new Timer();
+		
 		g1 = new GameEngine(fase,x0,y0,periodoLabirinto,scoreInicial);
 		montaTela();
 		addListeners();
 		isPaused = true;
-		while(true)
+		
+		repaint();
+		
+		atualizaBarra.scheduleAtFixedRate(new TimerTask()
 		{
-			if(!isPaused)
+			@Override
+			public void run() 
 			{
-				try 
+				if(!isPaused)
 				{
-					Thread.sleep(100);
-				} 
-				catch (InterruptedException e1){}
-				pontuacao.setText("Pontuação: "+g1.getPontuacao());
-				livesLabel.setText(g1.getVidas().toString());
-				g1.setKeyPool(keyPool);
+					pontuacao.setText("Pontuação: "+g1.getPontuacao());
+					livesLabel.setText(g1.getVidas().toString());
+					g1.setKeyPool(keyPool);
+				}
+				
 			}
-		}
+		}, 0, 100);
 	}
 	
 	public void addListeners()
@@ -107,7 +106,10 @@ public class JanelaDeJogo extends JFrame
 		       		{
 		       			dado.salvaJogo(g1.getX0(),g1.getY0(),g1.getPeriodoLabirinto(),g1.getPontuacao(),fase);
 		       		}
-		       		catch(Exception ex){}
+		       		catch(Exception ex)
+		       		{
+		       			JOptionPane.showMessageDialog(null, "Erro","Erro ao Salvar arquivo",JOptionPane.ERROR_MESSAGE);
+		       		}
 		       	break;
 		       		
 		       	case JOptionPane.CANCEL_OPTION:
@@ -127,7 +129,10 @@ public class JanelaDeJogo extends JFrame
     		{
     			dado.salvaJogo(g1.getX0(),g1.getY0(),g1.getPeriodoLabirinto(),g1.getPontuacao(),fase);
     		}
-    		catch(Exception ex){}
+    		catch(Exception ex)
+    		{
+    			JOptionPane.showMessageDialog(null, "Erro","Erro ao Salvar arquivo",JOptionPane.ERROR_MESSAGE);
+    		}
 	   	}	
 	   });
 	   
@@ -147,7 +152,6 @@ public class JanelaDeJogo extends JFrame
 	   		pausaJogo();
 	   	}
 	   });
-	  
 	}  
 	
 	public void montaTela() 
@@ -156,70 +160,77 @@ public class JanelaDeJogo extends JFrame
 		setSize(WIDTH, HEIGHT);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setVisible(true);
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		menuBar = new JMenuBar();
-		menu = new JMenu("Arquivo");
-		pontuacao = new JLabel("Pontuação: "+g1.getPontuacao());
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu("Arquivo");
 		salvar = new JMenuItem("Salvar Jogo");
-		lives = "■■■■■■■■■■";
-		nameLiveLabel = new JLabel("Lives: ");
-		livesLabel = new JLabel(lives);
 		carregar = new JMenuItem("Carregar Jogo");
+		JLabel nameVelLabel = new JLabel("Velocidade: ");
+		velLabel = new JLabel(g1.getVelocidade());
+		JLabel nameLiveLabel = new JLabel("Vidas: ");
+		livesLabel = new JLabel(g1.getVidas());
+		
+		
 		GridBagLayout layout = new GridBagLayout();
 		GridBagConstraints g = new GridBagConstraints();
-		int[] menuBarColWidth = {330,200,150};
 		
-		livesLabel.setForeground(Color.blue);
-		menuBar.setLayout(layout);
+		int[] menuBarColWidth = {130,10,130,10,170,150};
+		
+		pontuacao = new JLabel("Pontuação: "+g1.getPontuacao());
+		
+		livesLabel.setForeground(Color.BLUE);
 		layout.columnWidths = menuBarColWidth;
+		menuBar.setLayout(layout);
 		menu.add(salvar);
 		menu.add(carregar);
 		
+		g.fill = GridBagConstraints.RELATIVE;
 		g.gridx = 0;
 		g.anchor = GridBagConstraints.WEST;
 		menuBar.add(menu,g);
 		
-		g.fill = GridBagConstraints.RELATIVE;
-		g.anchor = GridBagConstraints.WEST;
+		
 		g.gridx = 1;
+		g.anchor = GridBagConstraints.EAST;
+		menuBar.add(nameVelLabel,g);
+		
+		g.gridx = 2;
+		g.anchor = GridBagConstraints.WEST;
+		menuBar.add(velLabel,g);
+		
+		
+		g.anchor = GridBagConstraints.EAST;
+		g.gridx = 3;
 		menuBar.add(nameLiveLabel,g);
 		
 		g.gridy = 0;
-		g.gridx = 1;
-		g.anchor = GridBagConstraints.CENTER;
+		g.gridx = 4;
+		g.anchor = GridBagConstraints.WEST;
 		menuBar.add(livesLabel,g);
 		
 		g.anchor = GridBagConstraints.CENTER;
 		g.fill = GridBagConstraints.HORIZONTAL;
-	   	g.gridx = 2;
+	   	g.gridx = 5;
 	   	menuBar.add(pontuacao,g);
 	   
 	   	setJMenuBar(menuBar);
 	   	add(g1);
+	   	setVisible(true);
 	}
 
 	public void pausaJogo()
 	{
-		try
-		{
-			setTitle("BreatHero - Pausado (Pressione \"espaço\" para continuar)");
-			g1.setPaused(true);
-			isPaused = true;
-		}
-		catch(Exception exc){}
+		setTitle("BreatHero - Pausado (Pressione \"espaço\" para continuar)");
+		g1.setPaused(true);
+		isPaused = true;
 	}
 	
 	public void continuaJogo()
 	{
-		try
-		{
-			Thread.sleep(100);
-			setTitle("BreatHero - Rodando (Pessione \"espaço\" para pausar)");
-			g1.setPaused(false);
-			isPaused = false;
-		}
-		catch(Exception exc){}
+		setTitle("BreatHero - Rodando (Pessione \"espaço\" para pausar)");
+		g1.setPaused(false);
+		isPaused = false;
 	}
 	
 	public boolean isPaused()

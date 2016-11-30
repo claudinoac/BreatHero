@@ -14,8 +14,6 @@ public class BreatHero
 	private int x0 = 75;
 	private int y = 210;
 	
-	
-
 	public BreatHero()
 	{
 		geraBreatHero();
