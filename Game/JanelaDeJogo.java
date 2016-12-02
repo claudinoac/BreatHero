@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.HashMap;
+
 import javax.swing.*;
+
 import IO.ManipulaDados;
 
 @SuppressWarnings("serial")
@@ -21,40 +23,38 @@ public class JanelaDeJogo extends JFrame
 	private JLabel velLabel;
 	private JMenuItem salvar;
 	private JMenuItem carregar;
-	private boolean isPaused;
-	private HashMap<Integer,Boolean> keyPool;
-	private int fase;
 	private Timer atualizaBarra;
 
-	public JanelaDeJogo() 
-	{	
-		this(0,210,5,0,1);
-	}
 	      
-	public JanelaDeJogo(double x0,double y0, long periodoLabirinto, long scoreInicial,int fase) 
+	public JanelaDeJogo(double x0,double y0, int velocidade, long scoreInicial,int fase,String joystick,String modo) 
 	{
 		
-		this.keyPool = new HashMap<Integer,Boolean>();
-		this.fase = fase;
 		this.atualizaBarra = new Timer();
 		
-		g1 = new GameEngine(fase,x0,y0,periodoLabirinto,scoreInicial);
+		g1 = new GameEngine(fase,x0,y0,velocidade,scoreInicial, joystick,modo);
 		montaTela();
 		addListeners();
-		isPaused = true;
-		
+		g1.setPaused(true);
 		repaint();
-		
+		atualizaBarraTimer();
+	}
+	
+	public void atualizaBarraTimer()
+	{
 		atualizaBarra.scheduleAtFixedRate(new TimerTask()
 		{
 			@Override
 			public void run() 
 			{
-				if(!isPaused)
+				if(!g1.isPaused())
 				{
 					pontuacao.setText("Pontuação: "+g1.getPontuacao());
-					livesLabel.setText(g1.getVidas().toString());
-					g1.setKeyPool(keyPool);
+					livesLabel.setText(g1.getVidasVisual());
+					if(g1.getVidas() == 0)
+					{
+						pausaJogo();
+						gameOver();
+					}
 				}
 				
 			}
@@ -63,30 +63,7 @@ public class JanelaDeJogo extends JFrame
 	
 	public void addListeners()
 	{
-	   this.addKeyListener(new KeyAdapter()
-	   {
-		  
-		  public void keyPressed(KeyEvent e)
-		  {
-			  keyPool.put(e.getKeyCode(), true);
-			  if(keyPool.get(KeyEvent.VK_SPACE)!=null && !isPaused)
-			   {
-				  pausaJogo();
-				  keyPool.remove(e.getKeyCode());
-			   }
-			  
-			  if(keyPool.get(KeyEvent.VK_SPACE)!= null && isPaused)
-			  {
-				  continuaJogo();
-				  keyPool.remove(e.getKeyCode());
-			  }
-		  }
-		  
-		  public void keyReleased(KeyEvent e)
-		  {
-			  keyPool.remove(e.getKeyCode());
-		  }
-	   });
+	   this.addKeyListener(g1.getJoystick());
 		
 	   this.addWindowListener(new WindowAdapter() 
 	   {
@@ -104,7 +81,7 @@ public class JanelaDeJogo extends JFrame
 		       		ManipulaDados dado = new ManipulaDados();
 		       		try
 		       		{
-		       			dado.salvaJogo(g1.getX0(),g1.getY0(),g1.getPeriodoLabirinto(),g1.getPontuacao(),fase);
+		       			dado.salvaJogo(g1.getX0(),g1.getY0(),g1.getVelocidade(),g1.getPontuacao(),g1.getFase(),g1.getJoyType(),g1.getMode());
 		       		}
 		       		catch(Exception ex)
 		       		{
@@ -127,7 +104,7 @@ public class JanelaDeJogo extends JFrame
 	   		ManipulaDados dado = new ManipulaDados();
     		try
     		{
-    			dado.salvaJogo(g1.getX0(),g1.getY0(),g1.getPeriodoLabirinto(),g1.getPontuacao(),fase);
+    			dado.salvaJogo(g1.getX0(),g1.getY0(),g1.getVelocidade(),g1.getPontuacao(),g1.getFase(),g1.getJoyType(),g1.getMode());
     		}
     		catch(Exception ex)
     		{
@@ -144,10 +121,10 @@ public class JanelaDeJogo extends JFrame
 	   		pausaJogo();
 	   		ManipulaDados dado = new ManipulaDados();
 	   		dado.carregaJogo();
-	   		fase = dado.getFase();
 	   		remove(g1);
-	   		g1 = new GameEngine(dado.getFase(),dado.getX0(),dado.getY0(),dado.getPeriodoLabirinto(),dado.getScoreInicial());
+	   		g1 = new GameEngine(dado.getFase(),dado.getX0(),dado.getY0(),dado.getVelocidade(),dado.getScoreInicial(),dado.getJoystick(),dado.getMode());
 	   		add(g1);
+	   		repaint();
 	   		continuaJogo();
 	   		pausaJogo();
 	   	}
@@ -167,9 +144,9 @@ public class JanelaDeJogo extends JFrame
 		salvar = new JMenuItem("Salvar Jogo");
 		carregar = new JMenuItem("Carregar Jogo");
 		JLabel nameVelLabel = new JLabel("Velocidade: ");
-		velLabel = new JLabel(g1.getVelocidade());
+		velLabel = new JLabel(g1.getVelocidadeVisual());
 		JLabel nameLiveLabel = new JLabel("Vidas: ");
-		livesLabel = new JLabel(g1.getVidas());
+		livesLabel = new JLabel(g1.getVidasVisual());
 		
 		
 		GridBagLayout layout = new GridBagLayout();
@@ -223,21 +200,42 @@ public class JanelaDeJogo extends JFrame
 	{
 		setTitle("BreatHero - Pausado (Pressione \"espaço\" para continuar)");
 		g1.setPaused(true);
-		isPaused = true;
 	}
 	
 	public void continuaJogo()
 	{
 		setTitle("BreatHero - Rodando (Pessione \"espaço\" para pausar)");
 		g1.setPaused(false);
-		isPaused = false;
 	}
 	
-	public boolean isPaused()
+	
+	public void gameOver()
 	{
-		boolean value = false;
-		value |= (isPaused || g1.isPaused());
-		return value;
+		try
+		{
+			String nomeJogador = null;
+			JOptionPane.showMessageDialog(null, "Game Over","Você perdeu todas as vidas!",JOptionPane.WARNING_MESSAGE);
+			nomeJogador = JOptionPane.showInputDialog(null,"Digite seu nome:","Game Over",JOptionPane.QUESTION_MESSAGE);
+		
+			if(!nomeJogador.endsWith(": "))
+				nomeJogador+=": ";
+		
+			ManipulaDados dado = new ManipulaDados();
+			try
+			{
+				dado.salvaRecordes(nomeJogador, g1.getPontuacao());
+			}
+			catch(IOException e)
+			{
+				JOptionPane.showMessageDialog(null,"Erro ao salvar arquivo de recordes", "Erro",JOptionPane.ERROR_MESSAGE);
+			}
+			System.exit(0);
+		}
+		catch(NullPointerException e)
+		{
+			JOptionPane.showMessageDialog(null, "Erro! Você não quis colocar seu nome para os recordes :(","Erro!",JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+		}
 	}
 }
 	  

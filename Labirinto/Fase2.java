@@ -3,8 +3,8 @@ package Labirinto;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import Personagens.BreatHero;
 
+import Personagens.BreatHero;
 
 public class Fase2 extends Labirinto 
 {		

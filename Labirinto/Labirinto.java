@@ -1,6 +1,7 @@
 package Labirinto;
 
 import java.awt.Graphics2D;
+
 import Personagens.BreatHero;
 
 public abstract class Labirinto  //Classe molde para fases do jogo

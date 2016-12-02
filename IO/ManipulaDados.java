@@ -10,9 +10,13 @@ public class ManipulaDados
 	private String caminho = null;
 	private FileNameExtensionFilter filter = null;
 	private double x0=0,y0=0;
-	private long periodoLabirinto=12;
+	private int velocidade=12;
 	private long scoreInicial =0;
 	private int fase;
+	private String joystick;
+	private String mode;
+	private String[] nomeJogadores = new String[6];
+	private long[] recordeJogadores = new long[6];
 	
 	public ManipulaDados()    //Construtor da classe - Instancia Objetos necessários para utilização
 	{
@@ -21,7 +25,33 @@ public class ManipulaDados
 		janela.setFileFilter(filter);
 	}
 	
-	public void salvaJogo(double x0, double y0, long periodoLabirinto, long scoreInicial, int fase) throws IOException  //Salva o jogo como
+	public void salvaRecordes(String nome, long recorde) throws IOException
+	{
+		boolean flagMudou = true;
+		caminho = "src/resources/recordes.bhrc";
+		carregaRecordes();
+		FileWriter gravaArquivo = new FileWriter(caminho);			
+		PrintWriter writer = new PrintWriter(gravaArquivo);
+		
+		for(int i=0; i<6; i++)
+		{
+			if(recorde > recordeJogadores[i] && flagMudou == true)
+			{
+				flagMudou = false;
+				recordeJogadores[i] = recorde;
+				nomeJogadores[i] = nome;
+			}	
+		}
+		
+		for(int i=0; i<6;i++)
+		{
+			writer.println(nomeJogadores[i]);
+			writer.println(recordeJogadores[i]);
+		}
+		writer.close();
+	}
+	
+	public void salvaJogo(double x_0, double y_0, int velocidade, long scoreAtual, int faseAtual,String joy,String modo) throws IOException  //Salva o jogo como
 	{
 		int retorno = janela.showSaveDialog(null);
 		if(retorno == JFileChooser.APPROVE_OPTION)
@@ -37,15 +67,19 @@ public class ManipulaDados
 			FileWriter gravaArquivo = new FileWriter(caminho);
 			PrintWriter writer = new PrintWriter(gravaArquivo);
 			writer.println("Posição x inicial:");
-			writer.println(x0);
+			writer.println(x_0);
 			writer.println("Posição y inicial:");
-			writer.println(y0);
+			writer.println(y_0);
 			writer.println("Velocidade Inicial:");
-			writer.println(periodoLabirinto);
+			writer.println(velocidade);
 			writer.println("Score Inicial:");
-			writer.println(scoreInicial);
+			writer.println(scoreAtual);
 			writer.println("Fase Atual:");
-			writer.println(fase);
+			writer.println(faseAtual);
+			writer.println("Joystick:");
+			writer.println(joy);
+			writer.println("Modo de Jogo:");
+			writer.println(modo);
 			writer.close();
 			JOptionPane.showMessageDialog(null,"Jogo salvo com sucesso!","OK!",JOptionPane.INFORMATION_MESSAGE);
 		}
@@ -53,6 +87,39 @@ public class ManipulaDados
 		{
 			throw new FileNotFoundException();
 		}
+	}
+	
+	public void carregaRecordes()
+	{ 
+		try
+		{
+			String caminho = "src/resources/recordes.bhrc";
+			File arquivo = new File(caminho);
+			FileReader arq = new FileReader(arquivo);
+			BufferedReader lerSave = new BufferedReader(arq);
+			
+			for(int i=0;i<6;i++)
+			{
+				try
+				{
+					nomeJogadores[i] = lerSave.readLine();
+					recordeJogadores[i] = Long.parseLong(lerSave.readLine());
+				}
+				catch(java.lang.NumberFormatException e)
+				{
+					nomeJogadores[i] = "";
+					recordeJogadores[i] = 0;
+				}
+			}
+			lerSave.close();
+			
+		}
+		catch(IOException e)
+		{
+			JOptionPane.showMessageDialog(null,"Error404","Erro ao ler arquivo de recordes",JOptionPane.ERROR_MESSAGE);
+		}
+		
+		
 	}
 	
 	public void carregaJogo()
@@ -67,22 +134,25 @@ public class ManipulaDados
 				BufferedReader lerSave = new BufferedReader(arq);
 				try
 				{
-					
 					lerSave.readLine();
 					this.x0 = Double.parseDouble(lerSave.readLine());
 					lerSave.readLine();
 					this.y0 = Double.parseDouble(lerSave.readLine());
 					lerSave.readLine();
-					this.periodoLabirinto = Long.parseLong(lerSave.readLine());
+					this.velocidade = Integer.parseInt(lerSave.readLine());
 					lerSave.readLine();
 					this.scoreInicial = Long.parseLong(lerSave.readLine());
 					lerSave.readLine();
 					this.fase = Integer.parseInt(lerSave.readLine());
+					lerSave.readLine();
+					this.joystick = lerSave.readLine();
+					lerSave.readLine();
+					this.mode = lerSave.readLine();
 					lerSave.close();
 				}
-				catch(Exception e)
+				catch(IOException e)
 				{
-					JOptionPane.showMessageDialog(null,"Erro ao ler arquivo","Error404",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,"Error404","Erro ao ler arquivo",JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			
@@ -104,9 +174,9 @@ public class ManipulaDados
 		return y0;
 	}
 
-	public long getPeriodoLabirinto() 
+	public int getVelocidade() 
 	{
-		return periodoLabirinto;
+		return velocidade;
 	}
 
 	public long getScoreInicial() 
@@ -117,5 +187,26 @@ public class ManipulaDados
 	public int getFase() 
 	{
 		return fase;
+	}
+
+	public String getJoystick() 
+	{
+		return joystick;
 	}	
+	
+	public String getMode()
+	{
+		return mode;
+	}
+	
+	public String[] getNomeJogadores()
+	{
+		return nomeJogadores;
+	}
+
+	public long[] getRecordeJogadores() 
+	{
+		return recordeJogadores;
+	}
+
 }
