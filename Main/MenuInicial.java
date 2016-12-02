@@ -1,19 +1,17 @@
-package Main;
+package Main; //Declara pacote ao qual pertence
 
-import java.awt.*;
+import java.awt.*;  //Importa classes das APIs awt e swing
 import javax.swing.*;
 import java.awt.event.*;
 
 @SuppressWarnings("serial")
 public class MenuInicial extends JFrame 
 {
-	private final int WIDTH = 700;
+	private final int WIDTH = 700;   //Constantes que definem o tamanho da tela de jogo
 	private final int HEIGHT = 480;
 	
-	private JPanel painel,painelBotao,titlePane;
-	private JButton[] botoes;
-	private JLabel title,subtitle;
-	private String pressedBut;
+	private JButton[] botoes;  //Declaração dos botões externa para poder linkar aos ActionListeners
+	private String pressedBut; //Declaração dos atributos que informam a classes externas se algum botão foi pressionado e qual foi
 	private boolean pressedFlag;
 	
 	public MenuInicial()
@@ -21,9 +19,8 @@ public class MenuInicial extends JFrame
 		super("BreatHero Menu");            //Seta nome do frame
 		this.setSize(WIDTH,HEIGHT);         // "   tamanho do frame
 		this.setResizable(false);           //Seta que esse frame não será redimensionável
-		painel = criaPainelPrincipal();     //Cria painel com botões e títulos 
+		JPanel painel = criaPainelPrincipal();     //Cria painel com botões e títulos 
 		addListeners();						//Adiciona Listeners
-		
 		this.add(painel);					//Adiciona o painel a este frame
 		this.setVisible(true);	 			//Seta este frame como visível
 	}
@@ -33,18 +30,17 @@ public class MenuInicial extends JFrame
 		botoes[0].addActionListener(new ActionListener()  //Adiciona listener ao botão "novo jogo"
 		{
 			@Override
-			public void actionPerformed(ActionEvent e)
+			public void actionPerformed(ActionEvent e)  
 			{
 				pressedBut = "novo";                      //Passa a mensagem de qual botão foi pressionado para uma variável que será lida externamente através de seu getter
 				pressedFlag = true;						  //Seta flag de pressionamento de botão para uma variável que será lida externamente através de seu getter
 			}
-		
 		});
 		
-		botoes[2].addActionListener(new ActionListener()
+		botoes[2].addActionListener(new ActionListener()  //Adiciona listener ao botão "opcoes"
 		{
 			@Override
-			public void actionPerformed(ActionEvent e)
+			public void actionPerformed(ActionEvent e)    
 			{
 				pressedBut = "opcoes";
 				pressedFlag = true;				
@@ -52,7 +48,7 @@ public class MenuInicial extends JFrame
 		
 		});
 	
-		botoes[1].addActionListener(new ActionListener()
+		botoes[1].addActionListener(new ActionListener()  //Adiciona listener ao botão "continua jogo"
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -62,7 +58,7 @@ public class MenuInicial extends JFrame
 			}
 		});
 		
-		botoes[3].addActionListener(new ActionListener()
+		botoes[3].addActionListener(new ActionListener()  //Adiciona listener ao botão "recordes"
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -72,7 +68,7 @@ public class MenuInicial extends JFrame
 			}
 		});
 		
-		botoes[4].addActionListener(new ActionListener()
+		botoes[4].addActionListener(new ActionListener()  //Adiciona listener ao botão "sair"
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -82,38 +78,26 @@ public class MenuInicial extends JFrame
 			}
 		});
 	}
-	
-	public boolean isPressedFlag() //getter para a flag de pressionamento de botão
-	{
-		return pressedFlag;
-	}
 
-	public void setPressedFlag(boolean pressedFlag)
+	public JPanel criaPainelPrincipal()   //Instancia componentes gráficos e retorna um painel com eles
 	{
-		this.pressedFlag = pressedFlag;
-	}
-
-	public String getPressedBut() //getter para a variavel de identificação de botão pressionado
-	{
-		return pressedBut;
-	}
-
-	public JPanel criaPainelPrincipal()
-	{
-		GridBagLayout layout = new GridBagLayout();              //Criação de um layout do tipo GridBag
-		GridBagConstraints g = new GridBagConstraints();         //Criação de diretivas para um layoutdo tipo GridBag
+		JPanel painel,painelBotao,titlePane;  //Declara componentes Gráficos
+		JLabel title,subtitle;
 		
-		titlePane = new JPanel();
-		subtitle = new JLabel("O Jogo da Respiração");
-		title = new JLabel("       BreatHero");
-		botoes = new JButton[5];                   //Criação dos botões do menu
-		botoes[0] = new JButton("Novo Jogo");
+		GridBagLayout layout = new GridBagLayout();             	//Criação de um layout do tipo GridBag
+		GridBagConstraints g = new GridBagConstraints();        	//Criação de diretivas para um layoutdo tipo GridBag
+		
+		titlePane = new JPanel();									//Cria um painel para o título e o subtítulo
+		subtitle = new JLabel("O Jogo da Respiração");				//Cria um JLabel para o subtítulo
+		title = new JLabel("       BreatHero");						//Cria um JLabel para o título
+		botoes = new JButton[5];                   					//Inicialização dos botões do menu
+		botoes[0] = new JButton("Novo Jogo");                   
 		botoes[1] = new JButton("Continuar Jogo");
 		botoes[2] = new JButton("Opções");
 		botoes[3] = new JButton("Recordes");
 		botoes[4] = new JButton("Sair");
-		painel = new JPanel();                     //Criação do painel principal do menu
-		painelBotao = new JPanel();                //Criação do painel que aloca os botões
+		painel = new JPanel();                     					//Criação do painel principal do menu
+		painelBotao = new JPanel();                					//Criação do painel que aloca os botões
 		
 		painel.setLayout(layout);
 		painel.setSize(this.getSize());
@@ -135,9 +119,24 @@ public class MenuInicial extends JFrame
 		painel.add(titlePane,g);                                   //Adiciona o painel de título ao painel principal com as configurações definidas por g
 		
 		g.anchor = GridBagConstraints.CENTER;                      //Configurações de g reformuladas para adição de outro componente ao painel com GridBag
-		g.gridy = 1;											   //????
+		g.gridy = 1;											   //Aloca o painel de botões na segunda coluna do painel geral
 		painel.add(painelBotao,g);								   //Adiciona o painel de botões ao painel principal com as configurações definidas por g
 		
 		return painel;											   //Retorna o painel com botoões e titulos
+	}
+	
+	public boolean isPressedFlag() //Getters e setters
+	{
+		return pressedFlag;
+	}
+
+	public void setPressedFlag(boolean pressedFlag)
+	{
+		this.pressedFlag = pressedFlag;
+	}
+
+	public String getPressedBut()
+	{
+		return pressedBut;
 	}
 }

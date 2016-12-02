@@ -1,4 +1,4 @@
-package IO;
+package IO;   //Declara pacote ao qual pertence
 
 public class Respirometro implements Joystick 
 {

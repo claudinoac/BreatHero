@@ -1,15 +1,15 @@
-package IO;
+package IO;  //Declara pacote ao qual pertence
 
-import java.io.*;
-import javax.swing.*;
+import java.io.*; //Importando classes das APIs de I/O e Swing
+import javax.swing.*; 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ManipulaDados 
 {
-	private JFileChooser janela = null;
+	private JFileChooser janela = null;             //Variáveis do tipo objetos para manipulação de arquivos
 	private String caminho = null;
 	private FileNameExtensionFilter filter = null;
-	private double x0=0,y0=0;
+	private double x0=0,y0=0;                       //Variáveis de objeto para manipulação de dados carregados de arquivos de gravação de jogo e recordes
 	private int velocidade=12;
 	private long scoreInicial =0;
 	private int fase;
@@ -25,7 +25,7 @@ public class ManipulaDados
 		janela.setFileFilter(filter);
 	}
 	
-	public void salvaRecordes(String nome, long recorde) throws IOException
+	public void salvaRecordes(String nome, long recorde) throws IOException  //Recebe o nome do ultimo jogador, testa se ele possui maior recorde que algum dos anteriores e atualiza os recordes.
 	{
 		boolean flagMudou = true;
 		caminho = "src/resources/recordes.bhrc";
@@ -35,7 +35,7 @@ public class ManipulaDados
 		
 		for(int i=0; i<6; i++)
 		{
-			if(recorde > recordeJogadores[i] && flagMudou == true)
+			if(recorde > recordeJogadores[i] && flagMudou == true)  //Verifica se o recorde do jogador é maior que dos outros;
 			{
 				flagMudou = false;
 				recordeJogadores[i] = recorde;
@@ -43,7 +43,7 @@ public class ManipulaDados
 			}	
 		}
 		
-		for(int i=0; i<6;i++)
+		for(int i=0; i<6;i++)	//Atualiza o arquivo de recordes
 		{
 			writer.println(nomeJogadores[i]);
 			writer.println(recordeJogadores[i]);
@@ -51,7 +51,7 @@ public class ManipulaDados
 		writer.close();
 	}
 	
-	public void salvaJogo(double x_0, double y_0, int velocidade, long scoreAtual, int faseAtual,String joy,String modo) throws IOException  //Salva o jogo como
+	public void salvaJogo(double x_0, double y_0, int velocidade, long scoreAtual, int faseAtual,String joy,String modo) throws IOException  //Salva os dados de jogo
 	{
 		int retorno = janela.showSaveDialog(null);
 		if(retorno == JFileChooser.APPROVE_OPTION)
@@ -89,23 +89,23 @@ public class ManipulaDados
 		}
 	}
 	
-	public void carregaRecordes()
+	public void carregaRecordes()  //Carrega o arquivo de recordes e guarda em variáveis de objeto para serem lidas externamente através de um getter
 	{ 
-		try
+		try  //Uma exceção pode ser lançada se o arquivo não existir
 		{
 			String caminho = "src/resources/recordes.bhrc";
 			File arquivo = new File(caminho);
 			FileReader arq = new FileReader(arquivo);
 			BufferedReader lerSave = new BufferedReader(arq);
 			
-			for(int i=0;i<6;i++)
+			for(int i=0;i<6;i++)   //Carrega os dados do arquivo em variáveis-buffer para serem posteriormente manipulados
 			{
 				try
 				{
 					nomeJogadores[i] = lerSave.readLine();
 					recordeJogadores[i] = Long.parseLong(lerSave.readLine());
 				}
-				catch(java.lang.NumberFormatException e)
+				catch(java.lang.NumberFormatException e)  //trata uma exceção que pode ser lançada caso alguma linha seja vazia
 				{
 					nomeJogadores[i] = "";
 					recordeJogadores[i] = 0;
@@ -114,7 +114,7 @@ public class ManipulaDados
 			lerSave.close();
 			
 		}
-		catch(IOException e)
+		catch(IOException e) //Se a exceção foi lançada, nenhum arquivo foi carregado e uma mensagem de erro aparece
 		{
 			JOptionPane.showMessageDialog(null,"Error404","Erro ao ler arquivo de recordes",JOptionPane.ERROR_MESSAGE);
 		}
@@ -122,17 +122,17 @@ public class ManipulaDados
 		
 	}
 	
-	public void carregaJogo()
+	public void carregaJogo() //Carrega o arquivo de estado salvo e guarda os dados em variáveis de objeto para serem lidas externamente através de um getter
 	{
-		try
+		try //Uma exceção pode ser lançada caso o arquivo a ser carregado não existir
 		{
 			int retorno = janela.showOpenDialog(null);
-			if(retorno == JFileChooser.APPROVE_OPTION)
+			if(retorno == JFileChooser.APPROVE_OPTION) //Verifica se o usuário escolheu algum arquivo para carregar
 			{
 				File arquivo = janela.getSelectedFile();
 				FileReader arq = new FileReader(arquivo);
 				BufferedReader lerSave = new BufferedReader(arq);
-				try
+				try //Uma exceção pode ser lançada caso alguma das linhas seja nula devido aos casts
 				{
 					lerSave.readLine();
 					this.x0 = Double.parseDouble(lerSave.readLine());
@@ -150,13 +150,13 @@ public class ManipulaDados
 					this.mode = lerSave.readLine();
 					lerSave.close();
 				}
-				catch(IOException e)
+				catch(IOException e) //Caso a exceção seja lançada, um painel de erro é exibido
 				{
-					JOptionPane.showMessageDialog(null,"Error404","Erro ao ler arquivo",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,"Error404","Erro ao ler dados",JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			
-			else
+			else //Se nenhum arquivo foi selecionado, um painel é exibido avisando isso
 			{
 				JOptionPane.showMessageDialog(null, "Nenhum Arquivo Selecionado");
 			}
@@ -164,7 +164,7 @@ public class ManipulaDados
 		catch(Exception e){}
 	}
 
-	public double getX0() 
+	public double getX0()  //Geters e seters para variáveis utilizadas como buffer de dados
 	{
 		return x0;
 	}

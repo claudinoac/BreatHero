@@ -1,14 +1,14 @@
-package Labirinto;
+package Labirinto;    //Declara pacote ao qual pertence
 
-import java.awt.Graphics2D;
+import java.awt.Graphics2D;  //Importa classes da API awt
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-import Personagens.BreatHero;
+import Personagens.BreatHero; //Importa a classe BreatHero, que está no pacote Personagens
 
 public class Fase2 extends Labirinto 
 {		
-	private static double x0 = 0;
+	private static double x0 = 0; //Coordenadas da primeira linha
 	private static double x1 = 300;
 	private static double y0 = 50;
 	private static double y1 = 170;
@@ -20,20 +20,20 @@ public class Fase2 extends Labirinto
 		super(4*x1);
 	}
 	
-	public Graphics2D paintComponent(Graphics2D g2) 
+	public Graphics2D paintComponent(Graphics2D g2)  //Pinta as linhas em um gráfico recebido externamente
 	{	
-		for(int i=0; i<2; i++)	//desenha as linhas no grafico
+		for(int i=0; i<2; i++)	
 		{
 			for(int j=0;j<8; j++)
 			{
-				g2.draw(lines[i][j]);
+				g2.draw(lines[i][j]); //Desenha linha por linha
 			}
 		}
 		return g2;
 	}
 
 	@Override
-	public void geraLabirinto() 
+	public void geraLabirinto() //Construtor do labirinto
 	{
 		for(int i=0; i<2; i++)
 		{
@@ -48,7 +48,7 @@ public class Fase2 extends Labirinto
 	}
 
 	@Override
-	public void moveLabirinto(double offset) 
+	public void moveLabirinto(double offset) //Move todo o labirinto por um offset
 	{
 		for(int i=0; i<2; i++)
 		{
@@ -65,7 +65,7 @@ public class Fase2 extends Labirinto
 	}
 
 	@Override
-	public boolean interceptaLabirinto(BreatHero boneco, int x, int y) 
+	public boolean interceptaLabirinto(BreatHero boneco, int x, int y) //retorna uma flag avisando se o personagem intercepta alguma das retas
 	{
 		boolean interceptou = false;
 		Rectangle2D rect = new Rectangle2D.Double(x,y,boneco.getImagem().getWidth(),boneco.getImagem().getHeight());
