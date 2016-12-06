@@ -1,7 +1,9 @@
 package Main; //Declara pacote ao qual pertence
 
-import java.awt.*;  //Importa classes das APIs awt e swing
+import java.awt.*;  //Importa classes das APIs awt e swing  (externas)
+
 import javax.swing.*;
+
 import java.awt.event.*;
 
 @SuppressWarnings("serial")
@@ -10,34 +12,36 @@ public class MenuInicial extends JFrame
 	private final int WIDTH = 700;   //Constantes que definem o tamanho da tela de jogo
 	private final int HEIGHT = 480;
 	
-	private JButton[] botoes;  //DeclaraÁ„o dos botıes externa para poder linkar aos ActionListeners
-	private String pressedBut; //DeclaraÁ„o dos atributos que informam a classes externas se algum bot„o foi pressionado e qual foi
+	private JButton[] botoes;  //Declara√ß√£o dos bot√µes externa para poder linkar aos ActionListeners
+	private String pressedBut; //Declara√ß√£o dos atributos que informam a classes externas se algum bot√£o foi pressionado e qual foi
 	private boolean pressedFlag;
 	
 	public MenuInicial()
 	{
 		super("BreatHero Menu");            //Seta nome do frame
+		
 		this.setSize(WIDTH,HEIGHT);         // "   tamanho do frame
-		this.setResizable(false);           //Seta que esse frame n„o ser· redimension·vel
-		JPanel painel = criaPainelPrincipal();     //Cria painel com botıes e tÌtulos 
-		addListeners();						//Adiciona Listeners
+		this.setResizable(false);           //Seta que esse frame n√£o ser√£o redimension√°vel
+		JPanel painel = criaPainelPrincipal();     //Cria painel com bot√µes e t√≠tulos 
+		addListeners();	//Adiciona Listeners
 		this.add(painel);					//Adiciona o painel a este frame
-		this.setVisible(true);	 			//Seta este frame como visÌvel
+		this.setVisible(true);	 			//Seta este frame como vis√≠vel
 	}
 
-	private void addListeners()   //Adiciona listeners ao frame e aos botıes
+	private void addListeners()   //Adiciona listeners ao frame e aos bot√µes
 	{
-		botoes[0].addActionListener(new ActionListener()  //Adiciona listener ao bot„o "novo jogo"
+		
+		botoes[0].addActionListener(new ActionListener()  //Adiciona listener ao bot√£o "novo jogo"
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)  
 			{
-				pressedBut = "novo";                      //Passa a mensagem de qual bot„o foi pressionado para uma vari·vel que ser· lida externamente atravÈs de seu getter
-				pressedFlag = true;						  //Seta flag de pressionamento de bot„o para uma vari·vel que ser· lida externamente atravÈs de seu getter
+				pressedBut = "novo";                      //Passa a mensagem de qual bot√£o foi pressionado para uma vari√°vel que ser√° lida externamente atrav√©s de seu getter
+				pressedFlag = true;						  //Seta flag de pressionamento de bot√Ø¬ø¬Ωo para uma vari√°vel que ser√° lida externamente atrav√©s de seu getter
 			}
 		});
 		
-		botoes[2].addActionListener(new ActionListener()  //Adiciona listener ao bot„o "opcoes"
+		botoes[2].addActionListener(new ActionListener()  //Adiciona listener ao bot√£o "opcoes"
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)    
@@ -48,7 +52,7 @@ public class MenuInicial extends JFrame
 		
 		});
 	
-		botoes[1].addActionListener(new ActionListener()  //Adiciona listener ao bot„o "continua jogo"
+		botoes[1].addActionListener(new ActionListener()  //Adiciona listener ao bot√£o "continua jogo"
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -58,7 +62,7 @@ public class MenuInicial extends JFrame
 			}
 		});
 		
-		botoes[3].addActionListener(new ActionListener()  //Adiciona listener ao bot„o "recordes"
+		botoes[3].addActionListener(new ActionListener()  //Adiciona listener ao bot√£o "recordes"
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -68,36 +72,39 @@ public class MenuInicial extends JFrame
 			}
 		});
 		
-		botoes[4].addActionListener(new ActionListener()  //Adiciona listener ao bot„o "sair"
+		botoes[4].addActionListener(new ActionListener()  //Adiciona listener ao bot√£o "sair"
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				pressedBut = "sair";
 				pressedFlag = true;
+				
 			}
 		});
+		
+		
 	}
 
-	public JPanel criaPainelPrincipal()   //Instancia componentes gr·ficos e retorna um painel com eles
+	public JPanel criaPainelPrincipal()   //Instancia componentes gr√°ficos e retorna um painel com eles
 	{
-		JPanel painel,painelBotao,titlePane;  //Declara componentes Gr·ficos
+		JPanel painel,painelBotao,titlePane;  //Declara componentes Gr√°ficos
 		JLabel title,subtitle;
 		
-		GridBagLayout layout = new GridBagLayout();             	//CriaÁ„o de um layout do tipo GridBag
-		GridBagConstraints g = new GridBagConstraints();        	//CriaÁ„o de diretivas para um layoutdo tipo GridBag
+		GridBagLayout layout = new GridBagLayout();             	//Cria√ß√£o de um layout do tipo GridBag
+		GridBagConstraints g = new GridBagConstraints();        	//Cria√ß√£o de diretivas para um layoutdo tipo GridBag
 		
-		titlePane = new JPanel();									//Cria um painel para o tÌtulo e o subtÌtulo
-		subtitle = new JLabel("O Jogo da RespiraÁ„o");				//Cria um JLabel para o subtÌtulo
-		title = new JLabel("†††††††BreatHero");						//Cria um JLabel para o tÌtulo
-		botoes = new JButton[5];                   					//InicializaÁ„o dos botıes do menu
+		titlePane = new JPanel();									//Cria um painel para o t√≠tulo e o subt√≠tulo
+		subtitle = new JLabel("O Jogo da Respira√ß√£o");				//Cria um JLabel para o subt√≠tulo
+		title = new JLabel("¬†¬†¬†¬†¬†¬†¬†BreatHero");						//Cria um JLabel para o t√≠tulo
+		botoes = new JButton[5];                   					//Inicializa√ß√£o dos bot√µes do menu
 		botoes[0] = new JButton("Novo Jogo");                   
 		botoes[1] = new JButton("Continuar Jogo");
-		botoes[2] = new JButton("OpÁıes");
+		botoes[2] = new JButton("Op√ß√µes");
 		botoes[3] = new JButton("Recordes");
 		botoes[4] = new JButton("Sair");
-		painel = new JPanel();                     					//CriaÁ„o do painel principal do menu
-		painelBotao = new JPanel();                					//CriaÁ„o do painel que aloca os botıes
+		painel = new JPanel();                     					//Cria√ß√£o do painel principal do menu
+		painelBotao = new JPanel();                					//Cria√ß√£o do painel que aloca os bot√µes
 		
 		painel.setLayout(layout);
 		painel.setSize(this.getSize());
@@ -105,24 +112,24 @@ public class MenuInicial extends JFrame
 		title.setFont(new Font("Dialog", Font.PLAIN, 30));         //Seta fonte do titulo do jogo
 		subtitle.setFont(new Font("Dialog",Font.PLAIN,25));        //Seta a fonte do subtitulo do jogo
 		
-		painelBotao.setLayout(new GridLayout(5,1,0,25));           //Seta um layout do tipo Grid para o painel que aloca os botıes, tendo esse 1 linha, 5 colunas espaÁadas de 30pixels entre si
+		painelBotao.setLayout(new GridLayout(5,1,0,25));           //Seta um layout do tipo Grid para o painel que aloca os bot√µes, tendo esse 1 linha, 5 colunas espa√ßadas de 30pixels entre si
 		
-		for(int i=0;i<5;i++)									   //Adiciona os botıes ao painel que os aloca
+		for(int i=0;i<5;i++)									   //Adiciona os bot√µes ao painel que os aloca
 			painelBotao.add(botoes[i]);
 		
-		titlePane.setLayout(new GridLayout(2,3,0,10));             //Seta um layout do tipo Grid para o painel que aloca o titulo e o subtitulo, tendo esse 1 linha, 2 colunas espaÁadas de 10pixels entre si
+		titlePane.setLayout(new GridLayout(2,3,0,10));             //Seta um layout do tipo Grid para o painel que aloca o titulo e o subtitulo, tendo esse 1 linha, 2 colunas espa√ßadas de 10pixels entre si
 		titlePane.add(title);									   //Adiciona o titulo ao painel que os aloca
 		titlePane.add(subtitle);								   // "       " subtitulo  "   "  "   "   "
 		
-		g.anchor = GridBagConstraints.NORTH;					   //Configura localizaÁ„o de um componente que ser· alocado em um painel com GridBag, neste caso ancorado ao norte do layout
-		g.insets = new Insets(0,0,60,0);						   //Configura espaÁamento entre os setores norte e centro do GridBag
-		painel.add(titlePane,g);                                   //Adiciona o painel de tÌtulo ao painel principal com as configuraÁıes definidas por g
+		g.anchor = GridBagConstraints.NORTH;					   //Configura localiza√ß√£o de um componente que ser√° alocado em um painel com GridBag, neste caso ancorado ao norte do layout
+		g.insets = new Insets(0,0,60,0);						   //Configura espa√Ø¬ø¬Ωamento entre os setores norte e centro do GridBag
+		painel.add(titlePane,g);                                   //Adiciona o painel de t√≠tulo ao painel principal com as configura√ß√µes definidas por g
 		
-		g.anchor = GridBagConstraints.CENTER;                      //ConfiguraÁıes de g reformuladas para adiÁ„o de outro componente ao painel com GridBag
-		g.gridy = 1;											   //Aloca o painel de botıes na segunda coluna do painel geral
-		painel.add(painelBotao,g);								   //Adiciona o painel de botıes ao painel principal com as configuraÁıes definidas por g
+		g.anchor = GridBagConstraints.CENTER;                      //Configura√ß√µes de g reformuladas para adi√ß√£o de outro componente ao painel com GridBag
+		g.gridy = 1;											   //Aloca o painel de bot√Ø¬ø¬Ωes na segunda coluna do painel geral
+		painel.add(painelBotao,g);								   //Adiciona o painel de bot√µes ao painel principal com as configura√ß√µes definidas por g
 		
-		return painel;											   //Retorna o painel com botoıes e titulos
+		return painel;											   //Retorna o painel com bot√µes e titulos
 	}
 	
 	public boolean isPressedFlag() //Getters e setters

@@ -1,6 +1,6 @@
 package Game; //Define o pacote para o qual pertence
 
-import java.awt.Color;                //Importando classes das APIs awt, I/O, Util e Swing
+import java.awt.Color;                //Importando classes das APIs awt, I/O, Util e Swing (externas)
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.*;
@@ -9,7 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.*;
 
-import IO.ManipulaDados;			//Importando classe ManipulaDados, pertencente ao pacote IO
+import IO.ManipulaDados;			//Importando classe ManipulaDados, pertencente ao pacote IO (interno)
 
 @SuppressWarnings("serial")
 public class JanelaDeJogo extends JFrame 

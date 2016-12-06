@@ -1,10 +1,10 @@
 package Labirinto;   //Declara pacote ao qual pertence
 
-import java.awt.Graphics2D;    //Importa classes da API awt
+import java.awt.Graphics2D;    //Importa classes da API awt (externa)
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-import Personagens.BreatHero; //Importa a classe BreatHero, que está no pacote Personagens
+import Personagens.BreatHero; //Importa a classe BreatHero, que estï¿½ no pacote Personagens (interno)
 
 
 public class Fase1 extends Labirinto
@@ -17,12 +17,12 @@ public class Fase1 extends Labirinto
 
 	private Line2D.Double[][] lines = new Line2D.Double[2][8]; //Cria uma matriz de 16 retas
 	
-	public Fase1()  //Define o periodo do labirinto
+	public Fase1()  //Define o periodo do labirinto na superclasse
 	{
 		super(2*x1);
 	}
 	
-	public Graphics2D paintComponent(Graphics2D g2)  //Metodo para pintar o labirinto em um gráfico recebido externamente
+	public Graphics2D paintComponent(Graphics2D g2)  //Metodo para pintar o labirinto em um grÃ¡fico recebido externamente
 	{	
 		for(int i=0; i<2; i++)	//desenha as linhas no grafico
 		{
@@ -60,7 +60,7 @@ public class Fase1 extends Labirinto
 	
 	public boolean interceptaLabirinto(BreatHero boneco,int x,int y) //Verifica se o personagem intercepta o labirinto
 	{
-		Rectangle2D rect = new Rectangle2D.Double(x,y,boneco.getImagem().getWidth(),boneco.getImagem().getHeight());  //Cria um retângulo com base na imagem do personagem tendo exatamente as mesmas coordenadas
+		Rectangle2D rect = new Rectangle2D.Double(x,y,boneco.getImagem().getWidth(),boneco.getImagem().getHeight());  //Cria um retÃ¢ngulo com base na imagem do personagem tendo exatamente as mesmas coordenadas
 		boolean interceptou = false;
 		
 		for(int i=0; i<2; i++)	

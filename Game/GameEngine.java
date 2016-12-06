@@ -1,14 +1,13 @@
-package Game;
+package Game;  //Declara pacote ao qual pertence
 
-import java.awt.Graphics;
+import java.awt.Graphics;          //Importando classes de pacotes externos
 import java.awt.Graphics2D;
 import java.awt.event.KeyListener;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.JPanel;
 
-import Personagens.BreatHero;
+import Personagens.BreatHero;		//Importando classes de pacotes internos
 import IO.Joystick;
 import IO.Keyboard;
 import Labirinto.Fase1;
@@ -35,7 +34,7 @@ public class GameEngine extends JPanel
 	private int fase = 1;
 	private int vidas = 10; //variável vidas é necessária além de vidasVisual para teste de game-over chamado em JanelaDeJogo
 	private String vidasVisual = "■■■■■■■■■■";
-	private String velocidadeVisual = "     ";
+	private String velocidadeVisual = "■■■■■";
 	private String joystick = "teclado";
 	private String modo = "desafio";
 	
@@ -95,8 +94,8 @@ public class GameEngine extends JPanel
 					break;
 					
 					default:
-						System.out.println("Err0r: Velocidade inválida! Setando velocidade para 1. . ."); //No caso de haver um valor inválido de velocidade
-						this.velocidadeVisual = "■    ";     //Seta velocidade padrão como 1
+						System.out.println("Err0r: Velocidade inválida! Setando velocidade para 1. . ."); //Caso houver um valor inválido de velocidade
+						this.velocidadeVisual = "■    ";    //Seta velocidade padrão como 1
 						this.velocidade = 1;
 						periodoLabirinto = 9;
 					break;
@@ -137,7 +136,7 @@ public class GameEngine extends JPanel
 						System.out.println("Err0r: Velocidade inválida! Setando velocidade para 1. . ."); //No caso de haver um valor inválido de velocidade
 						this.velocidadeVisual = "■    ";     //Seta velocidade padrão como 1
 						this.velocidade = 1;
-						periodoLabirinto = 8;
+						periodoLabirinto = 6;
 					break;
 				}
 			break;
@@ -195,7 +194,7 @@ public class GameEngine extends JPanel
 						y++;
 					}
 				}
-				GameEngine.this.repaint();
+				//GameEngine.this.repaint();
 			}
 		},0,periodoBreatHero);
 		
@@ -250,10 +249,10 @@ public class GameEngine extends JPanel
     		vidas++;
     }
 
-    public void perdeVida()     //Faz praticamente a mesma coisa que ganhaVida, porém substitui um '■' por um ' ' no ultimo indice com vida
+    public void perdeVida()     //Faz praticamente a mesma coisa que ganhaVida, por�m substitui um '�?' por um ' ' no ultimo indice com vida
     {
     	char[] aux = new char[11];
-    	vidasVisual.getChars(0,vidasVisual.length()-1,aux,0); //Faz praticamente a mesma coisa que ganhaVida, porém substitui um '■' por um ' '
+    	vidasVisual.getChars(0,vidasVisual.length()-1,aux,0); //Faz praticamente a mesma coisa que ganhaVida, por�m substitui um '�?' por um ' '
     	int i=0;
     	while(aux[i] != ' ' && i < vidasVisual.length()-1)
     		i++;

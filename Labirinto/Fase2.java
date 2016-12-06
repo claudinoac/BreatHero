@@ -1,17 +1,17 @@
 package Labirinto;    //Declara pacote ao qual pertence
 
-import java.awt.Graphics2D;  //Importa classes da API awt
+import java.awt.Graphics2D;  //Importa classes da API awt (externas)
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-import Personagens.BreatHero; //Importa a classe BreatHero, que está no pacote Personagens
+import Personagens.BreatHero; //Importa a classe BreatHero, que estï¿½ no pacote Personagens (interno)
 
 public class Fase2 extends Labirinto 
 {		
-	private static double x0 = 0; //Coordenadas da primeira linha
-	private static double x1 = 300;
-	private static double y0 = 50;
-	private static double y1 = 170;
+	private static int x0 = 0; //Coordenadas da primeira linha
+	private static int x1 = 300;
+	private static int y0 = 50;
+	private static int y1 = 170;
 	
 	private Line2D[][] lines = new Line2D.Double[2][8];
 	
@@ -20,7 +20,7 @@ public class Fase2 extends Labirinto
 		super(4*x1);
 	}
 	
-	public Graphics2D paintComponent(Graphics2D g2)  //Pinta as linhas em um gráfico recebido externamente
+	public Graphics2D paintComponent(Graphics2D g2)  //Pinta as linhas em um grÃ¡fico recebido externamente
 	{	
 		for(int i=0; i<2; i++)	
 		{

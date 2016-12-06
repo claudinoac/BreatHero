@@ -1,6 +1,6 @@
 package Personagens;                	 //Declara o pacote para o qual pertence
 
-import java.awt.Graphics2D;				 //Importa classes das APIs awt, I/O e imageI/O
+import java.awt.Graphics2D;				 //Importa classes das APIs awt, I/O e imageI/O (externas)
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,17 +10,17 @@ import javax.imageio.ImageIO;
 public class BreatHero 
 {
 	private BufferedImage imagem; //Declara buffer da imagem do personagem
-	private int x0 = 75;          //Define posiÁ„o fixa do personagem em x
-	private int y = 210;          //Define posiÁ„o do personagem em y
+	private int x0 = 75;          //Define posi√ß√£o fixa do personagem em x
+	private int y = 210;          //Define posi√ß√£o do personagem em y
 	
 	public BreatHero()
 	{
 		geraBreatHero();
 	}
 	
-	public Graphics2D paintComponent(Graphics2D g2)  //Metodo que recebe um gr·fico externo e retorna o mesmo com o personagem desenhado
+	public Graphics2D paintComponent(Graphics2D g2)  //Metodo que recebe um gr√°fico externo e retorna o mesmo com o personagem desenhado
 	{
-		g2.drawImage(imagem,x0,y,null);   //desenha a imagem no gr·fico
+		g2.drawImage(imagem,x0,y,null);   //desenha a imagem no gr√°fico
 		return g2;
 	}
 
@@ -28,15 +28,15 @@ public class BreatHero
 	{
 		try
 		{
-			imagem = ImageIO.read(new File("src/resources/bexiga.jpg"));
+			imagem = ImageIO.read(new File("resources/bexiga.jpg"));    //Carrega a imagem do personagem
 		}
 		catch(IOException e)
 		{
-			System.out.println("Imagem do BreatHero n„o encontrada");
+			System.out.println("Imagem do BreatHero n√£o encontrada");
 		}
 	}
 	
-	public void moveBreatHero(double y02)    //Setter para a posiÁ„o y do personagem
+	public void moveBreatHero(double y02)    //Setter para a posi√ß√£o y do personagem
 	{
 		y =  (int)y02;
 	}

@@ -1,15 +1,15 @@
 package IO;  //Declara pacote ao qual pertence
 
-import java.io.*; //Importando classes das APIs de I/O e Swing
+import java.io.*; //Importando classes das APIs de I/O e Swing (externas)
 import javax.swing.*; 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ManipulaDados 
 {
-	private JFileChooser janela = null;             //Vari·veis do tipo objetos para manipulaÁ„o de arquivos
+	private JFileChooser janela = null;             //Vari√°veis do tipo objetos para manipula√ß√£o de arquivos
 	private String caminho = null;
 	private FileNameExtensionFilter filter = null;
-	private double x0=0,y0=0;                       //Vari·veis de objeto para manipulaÁ„o de dados carregados de arquivos de gravaÁ„o de jogo e recordes
+	private double x0=0,y0=0;                       //Vari√°veis de objeto para manipula√ß√£o de dados carregados de arquivos de grava√ß√£o de jogo e recordes
 	private int velocidade=12;
 	private long scoreInicial =0;
 	private int fase;
@@ -18,7 +18,7 @@ public class ManipulaDados
 	private String[] nomeJogadores = new String[6];
 	private long[] recordeJogadores = new long[6];
 	
-	public ManipulaDados()    //Construtor da classe - Instancia Objetos necess·rios para utilizaÁ„o
+	public ManipulaDados()    //Construtor da classe - Instancia Objetos necess√°rios para utiliza√ß√£o
 	{
 		this.janela = new JFileChooser();
 		this.filter = new FileNameExtensionFilter("BreatHero Save States","bh");
@@ -35,7 +35,7 @@ public class ManipulaDados
 		
 		for(int i=0; i<6; i++)
 		{
-			if(recorde > recordeJogadores[i] && flagMudou == true)  //Verifica se o recorde do jogador È maior que dos outros;
+			if(recorde > recordeJogadores[i] && flagMudou == true)  //Verifica se o recorde do jogador √© maior que dos outros;
 			{
 				flagMudou = false;
 				recordeJogadores[i] = recorde;
@@ -57,18 +57,18 @@ public class ManipulaDados
 		if(retorno == JFileChooser.APPROVE_OPTION)
 		{
 			caminho = janela.getSelectedFile().getAbsolutePath();
-			if(!caminho.endsWith(".bh"))
+			if(!caminho.endsWith(".bh"))    //Garante que a extens√£o do arquivo de save ser√° .bh
 			{	
 				caminho = caminho +".bh";
 			}
 		}
 		if(caminho != "")
 		{
-			FileWriter gravaArquivo = new FileWriter(caminho);
+			FileWriter gravaArquivo = new FileWriter(caminho);      //Grava os dados no arquivo
 			PrintWriter writer = new PrintWriter(gravaArquivo);
-			writer.println("PosiÁ„o x inicial:");
+			writer.println("Posi√ß√£o x inicial:");
 			writer.println(x_0);
-			writer.println("PosiÁ„o y inicial:");
+			writer.println("Posi√ß√£o y inicial:");
 			writer.println(y_0);
 			writer.println("Velocidade Inicial:");
 			writer.println(velocidade);
@@ -89,23 +89,23 @@ public class ManipulaDados
 		}
 	}
 	
-	public void carregaRecordes()  //Carrega o arquivo de recordes e guarda em vari·veis de objeto para serem lidas externamente atravÈs de um getter
+	public void carregaRecordes()  //Carrega o arquivo de recordes e guarda em vari√°veis de objeto para serem lidas externamente atrav√©s de um getter
 	{ 
-		try  //Uma exceÁ„o pode ser lanÁada se o arquivo n„o existir
+		try  //Uma exce√ß√£o pode ser lan√ßada se o arquivo n√£o existir
 		{
 			String caminho = "src/resources/recordes.bhrc";
 			File arquivo = new File(caminho);
 			FileReader arq = new FileReader(arquivo);
 			BufferedReader lerSave = new BufferedReader(arq);
 			
-			for(int i=0;i<6;i++)   //Carrega os dados do arquivo em vari·veis-buffer para serem posteriormente manipulados
+			for(int i=0;i<6;i++)   //Carrega os dados do arquivo em vari√°veis-buffer para serem posteriormente manipulados
 			{
-				try
+				try  //tenta ler dados de recordes
 				{
 					nomeJogadores[i] = lerSave.readLine();
 					recordeJogadores[i] = Long.parseLong(lerSave.readLine());
 				}
-				catch(java.lang.NumberFormatException e)  //trata uma exceÁ„o que pode ser lanÁada caso alguma linha seja vazia
+				catch(java.lang.NumberFormatException e)  //trata uma exce√ß√£o que pode ser lan√ßada caso alguma linha seja vazia
 				{
 					nomeJogadores[i] = "";
 					recordeJogadores[i] = 0;
@@ -114,27 +114,25 @@ public class ManipulaDados
 			lerSave.close();
 			
 		}
-		catch(IOException e) //Se a exceÁ„o foi lanÁada, nenhum arquivo foi carregado e uma mensagem de erro aparece
+		catch(IOException e) //Se a exce√ß√£o foi lan√ßada, nenhum arquivo foi carregado e uma mensagem de erro aparece
 		{
 			JOptionPane.showMessageDialog(null,"Error404","Erro ao ler arquivo de recordes",JOptionPane.ERROR_MESSAGE);
-		}
-		
-		
+		}	
 	}
 	
-	public void carregaJogo() //Carrega o arquivo de estado salvo e guarda os dados em vari·veis de objeto para serem lidas externamente atravÈs de um getter
+	public void carregaJogo() //Carrega o arquivo de estado salvo e guarda os dados em vari√°veis de objeto para serem lidas externamente atrav√©s de um getter
 	{
-		try //Uma exceÁ„o pode ser lanÁada caso o arquivo a ser carregado n„o existir
+		try //Uma exce√ß√£o pode ser lan√ßada caso o arquivo a ser carregado n√£o existir
 		{
 			int retorno = janela.showOpenDialog(null);
-			if(retorno == JFileChooser.APPROVE_OPTION) //Verifica se o usu·rio escolheu algum arquivo para carregar
+			if(retorno == JFileChooser.APPROVE_OPTION) //Verifica se o usu√°rio escolheu algum arquivo para carregar
 			{
 				File arquivo = janela.getSelectedFile();
 				FileReader arq = new FileReader(arquivo);
 				BufferedReader lerSave = new BufferedReader(arq);
-				try //Uma exceÁ„o pode ser lanÁada caso alguma das linhas seja nula devido aos casts
+				try //Uma exce√ß√£o pode ser lan√ßada caso alguma das linhas seja nula devido aos casts
 				{
-					lerSave.readLine();
+					lerSave.readLine();                                     //l√™ os dados do arquivo de save, realizando sempre o cast para seus valores adequados
 					this.x0 = Double.parseDouble(lerSave.readLine());
 					lerSave.readLine();
 					this.y0 = Double.parseDouble(lerSave.readLine());
@@ -150,13 +148,13 @@ public class ManipulaDados
 					this.mode = lerSave.readLine();
 					lerSave.close();
 				}
-				catch(IOException e) //Caso a exceÁ„o seja lanÁada, um painel de erro È exibido
+				catch(IOException e) //Caso a exce√ß√£o seja lan√ßada, um painel de erro √© exibido
 				{
 					JOptionPane.showMessageDialog(null,"Error404","Erro ao ler dados",JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			
-			else //Se nenhum arquivo foi selecionado, um painel È exibido avisando isso
+			else //Se nenhum arquivo foi selecionado, um painel √© exibido avisando isso
 			{
 				JOptionPane.showMessageDialog(null, "Nenhum Arquivo Selecionado");
 			}
@@ -164,7 +162,7 @@ public class ManipulaDados
 		catch(Exception e){}
 	}
 
-	public double getX0()  //Geters e seters para vari·veis utilizadas como buffer de dados
+	public double getX0()  //Geters e seters para vari√°veis utilizadas como buffer de dados
 	{
 		return x0;
 	}
@@ -208,5 +206,4 @@ public class ManipulaDados
 	{
 		return recordeJogadores;
 	}
-
 }
